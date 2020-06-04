@@ -15,7 +15,10 @@
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
+function addRandomFact() {
+  const defaultBackgroundcolor = "rgb(40, 255, 225)";
+  changeBackgroundColor(defaultBackgroundcolor);
+
   const favorites =
       ['My favorite TV show is "Sherlock"', 'My favorite movie is "The Nightmare before Christmas"', 
       'My favorite color is purple', 'My favorite food is pizza', 'My favorite animals are penguins', 
@@ -24,7 +27,15 @@ function addRandomGreeting() {
   // Pick a random greeting.
   const favorite = favorites[Math.floor(Math.random() * favorites.length)];
 
+  if(favorite === 'My favorite color is purple'){
+      changeBackgroundColor('purple');
+  }
+  
   // Add it to the page.
   const favoriteContainer = document.getElementById('favorite-container');
   favoriteContainer.innerText = favorite;
+}
+
+function changeBackgroundColor(color){
+    document.body.style.background = color;
 }
