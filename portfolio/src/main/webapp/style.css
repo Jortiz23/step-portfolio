@@ -1,5 +1,9 @@
+:root {
+  --default-color: #00ffff;
+}
+
 body{
-    background-color: rgb(40, 255, 225);
+    background-color: var(--default-color);
 }
 
 #content {

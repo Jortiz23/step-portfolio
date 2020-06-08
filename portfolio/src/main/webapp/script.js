@@ -16,8 +16,8 @@
  * Adds a random greeting to the page.
  */
 function addRandomFact() {
-  const defaultBackgroundcolor = "rgb(40, 255, 225)";
-  changeBackgroundColor(defaultBackgroundcolor);
+  const defaultBackgroundColor = 'var(--default-color)';
+  changeBackgroundColor(defaultBackgroundColor);
 
   const favorites =
       ['My favorite TV show is "Sherlock"', 'My favorite movie is "The Nightmare before Christmas"', 
