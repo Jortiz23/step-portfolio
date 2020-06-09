@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Joey's Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="content">
-      <h1>Joey's Portfolio</h1>
-      <p>Hi! My name is Joseph Ortiz, but you can call me Joey. I am a rising Junior at Loyola 
-          Marymount University. I am a Computer Science and Electrical Engineering double major. 
-          I love playing soccer and video games. I love listening to music and a fun fact 
-          about myself is that when I blink, my nose twitches.</p>
-      <p>Click here to generate a fun fact:</p>
-      <button onclick="addRandomFact()">Fun Fact</button>
-      <div id="favorite-container"></div>
-      <img id="selfie" src="/images/me.jpeg">
-      <p>Click <a href="images.html">here</a> to see more pictures!</p>
-      <p>Here are the links to my GitHub and LinkedIn profiles:</p>
-      <div>
-          <form id="button1" action="https://github.com/Jortiz23">
-            <input type="submit" value="GitHub" />
-          </form>
-          <form id="button2" action="https://www.linkedin.com/in/joseph-ortiz-144b54168">
-            <input type="submit" value="LinkedIn" />
-          </form>
-      </div>
-    </div>
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Joey's Portfolio</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <div id="content">
+            <h1>Joey's Portfolio</h1>
+            <p>Hi! My name is Joseph Ortiz, but you can call me Joey. I am a rising Junior at Loyola 
+                Marymount University. I am a Computer Science and Electrical Engineering double major. 
+                I love playing soccer and video games. I love listening to music and a fun fact 
+                about myself is that when I blink, my nose twitches.</p>
+            <p>Click here to generate a fun fact:</p>
+            <button onclick="addRandomFact()">Fun Fact</button>
+            <div id="favorite-container"></div>
+            <img id="selfie" src="/images/me.jpeg">
+            <p>Click here to see more pictures:</p>
+            <form id="gallery-button" action="/images.html">
+                <input type="submit" value="Image Gallery" />
+            </form>
+            <h2>Socials</h2>
+            <p>Here are the links to my GitHub and LinkedIn profiles:</p>
+            <div id="socials-container">
+                <form id="github-button" action="https://github.com/Jortiz23">
+                    <input type="submit" value="GitHub" />
+                </form>
+                <form id="linkedin-button" action="https://www.linkedin.com/in/joseph-ortiz-144b54168">
+                    <input type="submit" value="LinkedIn" />
+                </form>
+            </div>
+            <p>Click <a href="/data">here</a> to go to data screen</p>
+            <button onclick="getGreeting()">Get Greeting</button>
+            <div id="greeting-container"></div>
+        </div>
+    </body>
 </html>

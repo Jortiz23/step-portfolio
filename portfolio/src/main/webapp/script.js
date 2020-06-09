@@ -39,3 +39,9 @@ function addRandomFact() {
 function changeBackgroundColor(color){
     document.body.style.background = color;
 }
+
+function getGreeting(){
+    fetch('/data').then(response => response.text()).then((greeting) => {
+        document.getElementById('greeting-container').innerText = greeting;
+    });
+}
