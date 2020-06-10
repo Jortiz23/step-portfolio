@@ -41,7 +41,19 @@ function changeBackgroundColor(color){
 }
 
 function getGreeting(){
-    fetch('/data').then(response => response.text()).then((greeting) => {
-        document.getElementById('greeting-container').innerText = greeting;
+    fetch('/data').then(response => response.json()).then((greetings) => {
+        console.log(greetings);
+        const greetingContainer = document.getElementById('greeting-container');
+        greetings.forEach((greeting) => {
+            console.log(greeting);
+            greetingContainer.appendChild(createListElement(greeting));
+        });
+        //greetingContainer.innerText = greetings[1];
     });
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
