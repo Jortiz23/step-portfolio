@@ -1,3 +1,11 @@
+:root {
+  --default-color: #00ffff;
+}
+
+body{
+    background-color: var(--default-color);
+}
+
 #content {
   margin-left: auto;
   margin-right: auto;
@@ -8,7 +16,13 @@
   margin-top: 20px;
 }
 
-#selfie{
+#selfie, .images{
     width: 50%;
     height: 50%;
+}
+
+#button1 , #button2 {
+    padding: 2px 12px;
+    display: inline-block;
+    justify-content: center;
 }
