@@ -24,14 +24,11 @@ function addRandomFact() {
       'My favorite color is purple', 'My favorite food is pizza', 'My favorite animals are penguins', 
       'My favorite board game is called "Betrayal at the House on the Hill"', 'Boo!'];
 
-  // Pick a random greeting.
   const favorite = favorites[Math.floor(Math.random() * favorites.length)];
 
   if(favorite === 'My favorite color is purple'){
       changeBackgroundColor('purple');
   }
-  
-  // Add it to the page.
   const favoriteContainer = document.getElementById('favorite-container');
   favoriteContainer.innerText = favorite;
 }
@@ -40,15 +37,12 @@ function changeBackgroundColor(color){
     document.body.style.background = color;
 }
 
-function getGreeting(){
-    fetch('/data').then(response => response.json()).then((greetings) => {
-        console.log(greetings);
-        const greetingContainer = document.getElementById('greeting-container');
-        greetings.forEach((greeting) => {
-            console.log(greeting);
-            greetingContainer.appendChild(createListElement(greeting));
+function getComments(){
+    fetch('/comments?num-of-comments=' + numOfComments).then(response => response.json()).then((comments) => {
+        const commentContainer = document.getElementById('comment-container');
+        comments.forEach((comment) => {
+            commentContainer.appendChild(createListElement(comment));
         });
-        //greetingContainer.innerText = greetings[1];
     });
 }
 

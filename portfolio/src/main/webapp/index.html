@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="style.css">
         <script src="script.js"></script>
     </head>
-    <body>
+    <body onload="getComments()">
         <div id="content">
             <h1>Joey's Portfolio</h1>
             <p>Hi! My name is Joseph Ortiz, but you can call me Joey. I am a rising Junior at Loyola 
@@ -32,8 +32,16 @@
                 </form>
             </div>
             <p>Click <a href="/data">here</a> to go to data screen</p>
-            <button onclick="getGreeting()">Get Greeting</button>
-            <div id="greeting-container"></div>
+            <form action="/data" method="POST">
+                <p>Comment:</p>
+                <input type="text" name="comment">
+                <br/><br/>
+                <input type="submit">
+            </form>
+            <div id="comment-container"></div>
+            <form action="/delete-comments" method="POST">
+                <input type="submit" value="Delete Comments"/>
+            </form>
         </div>
     </body>
 </html>
