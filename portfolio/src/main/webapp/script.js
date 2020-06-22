@@ -38,7 +38,7 @@ function changeBackgroundColor(color){
 }
 
 function getComments(){
-    fetch('/comments?num-of-comments=' + numOfComments).then(response => response.json()).then((comments) => {
+    fetch('/comments').then(response => response.json()).then((comments) => {
         const commentContainer = document.getElementById('comment-container');
         comments.forEach((comment) => {
             commentContainer.appendChild(createListElement(comment));
