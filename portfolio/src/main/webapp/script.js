@@ -38,11 +38,13 @@ function changeBackgroundColor(color){
 }
 
 function getComments(){
-    fetch('/comments').then(response => response.json()).then((comments) => {
-        const commentContainer = document.getElementById('comment-container');
-        comments.forEach((comment) => {
-            commentContainer.appendChild(createListElement(comment));
-        });
+    fetch('/comments')
+        .then(response => response.json())
+        .then((comments) => {
+            const commentContainer = document.getElementById('comment-container');
+            comments.forEach((comment) => {
+                commentContainer.appendChild(createListElement(comment));
+            });
     });
 }
 
