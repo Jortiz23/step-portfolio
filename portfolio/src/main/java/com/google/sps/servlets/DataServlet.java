@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -37,28 +39,38 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+        response.setContentType("text/html;");
 
+        UserService userService = UserServiceFactory.getUserService();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
-
-        ArrayList<String> messages = new ArrayList<>();
-        for(Entity entity : results.asIterable()){
-            messages.add((String)entity.getProperty("comment"));
+        
+        if(userService.isUserLoggedIn()){    
+            ArrayList<ArrayList<String>> userComments = new ArrayList<>();
+            for(Entity entity : results.asIterable()){
+                ArrayList<String> userCommentCombo = new ArrayList<String>();
+                userCommentCombo.add((String)entity.getProperty("email"));
+                userCommentCombo.add((String)entity.getProperty("comment"));
+                userComments.add(userCommentCombo);
+            }
+            String message = convertToJsonUsingGson(userComments);
+            response.getWriter().println(message);
         }
-
-        String json = convertToJsonUsingGson(messages);
-        response.setContentType("text/html;");
-        response.getWriter().println(json);
+        
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UserService userService = UserServiceFactory.getUserService();
+        
         String comment = request.getParameter("comment");
         long timestamp = System.currentTimeMillis();
+        String email = userService.getCurrentUser().getEmail();
         
         if(!comment.equals("")){
             Entity commentEntity = new Entity("Comment");
             commentEntity.setProperty("comment", comment);
+            commentEntity.setProperty("email", email);
             commentEntity.setProperty("timestamp", timestamp);
             
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -67,7 +79,7 @@ public class DataServlet extends HttpServlet {
         response.sendRedirect("/index.html");
     }
 
-    private String convertToJsonUsingGson(ArrayList<String> messages) {
+    private String convertToJsonUsingGson(ArrayList<ArrayList<String>> messages) {
         Gson gson = new Gson();
         String json = gson.toJson(messages);
         return json;
