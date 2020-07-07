@@ -48,7 +48,18 @@ function getComments(){
 }
 
 function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+    const liElement = document.createElement('li');
+    liElement.innerText = text;
+    return liElement;
+}
+
+function fetchBlobstoreUrl() {
+    fetch('/blobstore-upload-url')
+        .then((response) => {
+            return response.text();
+        })
+        .then((imageUploadUrl) => {
+            const blobForm = document.getElementById('blob-form');
+            blobForm.action = imageUploadUrl;
+        });
 }

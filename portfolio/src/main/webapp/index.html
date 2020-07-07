@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="style.css">
         <script src="script.js"></script>
     </head>
-    <body onload="getComments()">
+    <body onload="getComments(); fetchBlobstoreUrl()">
         <div id="content">
             <h1>Joey's Portfolio</h1>
             <form id="login-button" action="/login">
@@ -34,7 +34,7 @@
                     <input type="submit" value="LinkedIn" />
                 </form>
             </div>
-            <form action="/comments" method="POST">
+            <form id="comment-submit" action="/comments" method="POST">
                 <p>Comment:</p>
                 <input type="text" name="comment">
                 <br/><br/>
@@ -43,6 +43,12 @@
             <div id="comment-container"></div>
             <form action="/delete-comments" method="POST">
                 <input type="submit" value="Delete Comments"/>
+            </form>
+            <form id="blob-form" method="POST" enctype="multipart/form-data">
+                <p>Upload an image:</p>
+                <input type="file" name="image">
+                <br/><br/>
+                <button>Submit</button>
             </form>
         </div>
     </body>
