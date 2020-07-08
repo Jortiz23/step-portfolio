@@ -42,11 +42,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * When the user submits the form, Blobstore processes the file upload and then forwards the request
- * to this servlet. This servlet can then process the request using the file URL we get from
- * Blobstore.
- */
 @WebServlet("/image-handler")
 public class FormHandlerServlet extends HttpServlet {
 
@@ -71,7 +66,6 @@ public class FormHandlerServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-        // Get the URL of the image that the user uploaded to Blobstore.
         String imageURL = getUploadedFileUrl(request, "image");
         long timestamp = System.currentTimeMillis();
 
@@ -81,8 +75,6 @@ public class FormHandlerServlet extends HttpServlet {
 
         datastore.put(imageEntity);
 
-        // Output some HTML that shows the data the user entered.
-        // A real codebase would probably store these in Datastore.
         response.getWriter().println(imageURL);
         response.sendRedirect("/index.html");
     }
