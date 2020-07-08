@@ -14,14 +14,14 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.servlets.ServletConstants;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+        Query query = new Query(ServletConstants.COMMENT_ENTITY_ID).addSort(ServletConstants.ENTITY_TIMESTAMP_ID, SortDirection.ASCENDING);
         response.setContentType("text/html;");
 
         PreparedQuery results = datastore.prepare(query);
@@ -56,8 +56,8 @@ public class DataServlet extends HttpServlet {
             ArrayList<ArrayList<String>> userComments = new ArrayList<>();
             for(Entity entity : results.asIterable()){
                 ArrayList<String> userCommentCombo = new ArrayList<String>();
-                userCommentCombo.add((String)entity.getProperty("email"));
-                userCommentCombo.add((String)entity.getProperty("comment"));
+                userCommentCombo.add((String)entity.getProperty(ServletConstants.ENTITY_EMAIL_ID));
+                userCommentCombo.add((String)entity.getProperty(ServletConstants.ENTITY_COMMENT_ID));
                 userComments.add(userCommentCombo);
             }
             String message = convertToJsonUsingGson(userComments);
@@ -68,7 +68,7 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String comment = request.getParameter(ServletConstants.COMMENT_TEXT_ID);
+        String comment = request.getParameter(ServletConstants.ENTITY_COMMENT_ID);
         long timestamp = System.currentTimeMillis();
         String email = userService.getCurrentUser().getEmail();
         

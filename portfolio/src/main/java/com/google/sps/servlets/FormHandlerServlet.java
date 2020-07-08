@@ -47,7 +47,7 @@ public class FormHandlerServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query("Image").addSort("timestamp", SortDirection.ASCENDING);
+        Query query = new Query(ServletConstants.IMAGE_ENTITY_ID).addSort(ServletConstants.ENTITY_TIMESTAMP_ID, SortDirection.ASCENDING);
         response.setContentType("text/html");
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -55,7 +55,7 @@ public class FormHandlerServlet extends HttpServlet {
 
         ArrayList<String> imageURLs = new ArrayList<>();
         for(Entity entity : results.asIterable()){
-            imageURLs.add((String)entity.getProperty("imageURL"));
+            imageURLs.add((String)entity.getProperty(ServletConstants.ENTITY_IMAGEURL_ID));
         }
 
         String image = convertToJsonUsingGson(imageURLs);
@@ -66,24 +66,24 @@ public class FormHandlerServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-        String imageURL = getUploadedFileUrl(request, "image");
+        String imageURL = getUploadedFileUrl(request, ServletConstants.REQUEST_IMAGE_PARAM);
         long timestamp = System.currentTimeMillis();
 
-        Entity imageEntity = new Entity("Image");
-        imageEntity.setProperty("imageURL", imageURL);
-        imageEntity.setProperty("timestamp", timestamp);
+        Entity imageEntity = new Entity(ServletConstants.IMAGE_ENTITY_ID);
+        imageEntity.setProperty(ServletConstants.ENTITY_IMAGEURL_ID, imageURL);
+        imageEntity.setProperty(ServletConstants.ENTITY_TIMESTAMP_ID, timestamp);
 
         datastore.put(imageEntity);
 
         response.getWriter().println(imageURL);
-        response.sendRedirect("/index.html");
+        response.sendRedirect(ServletConstants.INDEX_URL);
     }
 
     /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
     private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
         BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-        List<BlobKey> blobKeys = blobs.get("image");
+        List<BlobKey> blobKeys = blobs.get(ServletConstants.REQUEST_IMAGE_PARAM);
 
         // User submitted form without selecting a file, so we can't get a URL. (dev server)
         if (blobKeys == null || blobKeys.isEmpty()) {

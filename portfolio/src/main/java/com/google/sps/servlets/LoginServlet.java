@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.sps.servlets.ServletConstants;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,19 +26,25 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    UserService userService;
+
+    @Override
+    public void init(){
+        userService = UserServiceFactory.getUserService();
+    }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-        UserService userService = UserServiceFactory.getUserService();
         if (userService.isUserLoggedIn()) {
-            String logoutUrl = userService.createLogoutURL("/index.html");
+            String logoutUrl = userService.createLogoutURL(ServletConstants.INDEX_URL);
             String logoutDetails = "<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>" +
                                     "<form action = \"/login\" method = \"post\">" +
                                     "<button type = \"submit\">Go Back</button>" +
                                     "</form>";
             response.getWriter().println(logoutDetails);
         } else {
-            String loginUrl = userService.createLoginURL("/index.html");
+            String loginUrl = userService.createLoginURL(ServletConstants.INDEX_URL);
             String loginDetails = "<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>" +
                                     "<form action = \"/login\" method = \"post\">" +
                                     "<button type = \"submit\">Go Back</button>" +
