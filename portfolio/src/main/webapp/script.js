@@ -40,16 +40,43 @@ function changeBackgroundColor(color){
 function getComments(){
     fetch('/comments')
         .then(response => response.json())
-        .then((comments) => {
+        .then((userComments) => {
             const commentContainer = document.getElementById('comment-container');
-            comments.forEach((comment) => {
-                commentContainer.appendChild(createListElement(comment));
+            userComments.forEach((userComment) => {
+                const message = userComment[0] + " : " + userComment[1];
+                commentContainer.appendChild(createListElement(message));
             });
+        });
+}
+
+function getImages(){
+    fetch('/image-handler').then(response => response.json()).then((imageURLs) => {
+        const imageContainer = document.getElementById('image-container');
+        imageURLs.forEach((imageURL) => {
+            imageContainer.appendChild(createImageElement(imageURL));
+        });
     });
 }
 
 function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+    const liElement = document.createElement('li');
+    liElement.innerText = text;
+    return liElement;
+}
+
+function createImageElement(ref) {
+    const imgElement = document.createElement('img');
+    imgElement.src = ref;
+    return imgElement;
+}
+
+function fetchBlobstoreUrl() {
+    fetch('/blobstore-upload-url')
+        .then((response) => {
+            return response.text();
+        })
+        .then((imageUploadUrl) => {
+            const blobForm = document.getElementById('blob-form');
+            blobForm.action = imageUploadUrl;
+        });
 }
