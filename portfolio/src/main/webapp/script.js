@@ -38,13 +38,15 @@ function changeBackgroundColor(color){
 }
 
 function getComments(){
-    fetch('/comments').then(response => response.json()).then((userComments) => {
-        const commentContainer = document.getElementById('comment-container');
-        userComments.forEach((userComment) => {
-            const message = userComment[0] + " : " + userComment[1];
-            commentContainer.appendChild(createListElement(message));
+    fetch('/comments')
+        .then(response => response.json())
+        .then((userComments) => {
+            const commentContainer = document.getElementById('comment-container');
+            userComments.forEach((userComment) => {
+                const message = userComment[0] + " : " + userComment[1];
+                commentContainer.appendChild(createListElement(message));
+            });
         });
-    });
 }
 
 function getImages(){

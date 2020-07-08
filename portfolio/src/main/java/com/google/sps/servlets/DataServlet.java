@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
+import com.google.sps.servlets.ServletConstants;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -35,13 +36,20 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
+    DatastoreService datastore;
+    UserService userService;
+
+    @Override
+    public void init(){
+        datastore = DatastoreServiceFactory.getDatastoreService();
+        userService = UserServiceFactory.getUserService();
+    }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
         response.setContentType("text/html;");
 
-        UserService userService = UserServiceFactory.getUserService();
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         
         if(userService.isUserLoggedIn()){    
@@ -60,28 +68,23 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserService userService = UserServiceFactory.getUserService();
-        
-        String comment = request.getParameter("comment");
+        String comment = request.getParameter(ServletConstants.COMMENT_TEXT_ID);
         long timestamp = System.currentTimeMillis();
         String email = userService.getCurrentUser().getEmail();
         
-        if(!comment.equals("")){
-            Entity commentEntity = new Entity("Comment");
-            commentEntity.setProperty("comment", comment);
-            commentEntity.setProperty("email", email);
-            commentEntity.setProperty("timestamp", timestamp);
+        if(!comment.isEmpty()){
+            Entity commentEntity = new Entity(ServletConstants.COMMENT_ENTITY_ID);
+            commentEntity.setProperty(ServletConstants.ENTITY_COMMENT_ID, comment);
+            commentEntity.setProperty(ServletConstants.ENTITY_EMAIL_ID , email);
+            commentEntity.setProperty(ServletConstants.ENTITY_TIMESTAMP_ID, timestamp);
             
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             datastore.put(commentEntity);
         }
-        response.sendRedirect("/index.html");
+        response.sendRedirect(ServletConstants.INDEX_URL);
     }
 
     private String convertToJsonUsingGson(ArrayList<ArrayList<String>> messages) {
-        Gson gson = new Gson();
-        String json = gson.toJson(messages);
-        return json;
+        return new Gson().toJson(messages);
     }
 }
 
