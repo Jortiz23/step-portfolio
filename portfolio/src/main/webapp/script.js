@@ -24,18 +24,32 @@ function addRandomFact() {
       'My favorite color is purple', 'My favorite food is pizza', 'My favorite animals are penguins', 
       'My favorite board game is called "Betrayal at the House on the Hill"', 'Boo!'];
 
-  // Pick a random greeting.
   const favorite = favorites[Math.floor(Math.random() * favorites.length)];
 
   if(favorite === 'My favorite color is purple'){
       changeBackgroundColor('purple');
   }
-  
-  // Add it to the page.
   const favoriteContainer = document.getElementById('favorite-container');
   favoriteContainer.innerText = favorite;
 }
 
 function changeBackgroundColor(color){
     document.body.style.background = color;
+}
+
+function getComments(){
+    fetch('/comments')
+        .then(response => response.json())
+        .then((comments) => {
+            const commentContainer = document.getElementById('comment-container');
+            comments.forEach((comment) => {
+                commentContainer.appendChild(createListElement(comment));
+            });
+    });
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }

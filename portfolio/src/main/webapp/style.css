@@ -21,8 +21,12 @@ body{
     height: 50%;
 }
 
-#button1 , #button2 {
+#github-button , #linkedin-button {
     padding: 2px 12px;
-    display: inline-block;
+}
+
+#socials-container{
+    display: flex;
     justify-content: center;
+    align-items: center;
 }
