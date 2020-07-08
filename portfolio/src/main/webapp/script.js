@@ -47,10 +47,25 @@ function getComments(){
     });
 }
 
+function getImages(){
+    fetch('/image-handler').then(response => response.json()).then((imageURLs) => {
+        const imageContainer = document.getElementById('image-container');
+        imageURLs.forEach((imageURL) => {
+            imageContainer.appendChild(createImageElement(imageURL));
+        });
+    });
+}
+
 function createListElement(text) {
     const liElement = document.createElement('li');
     liElement.innerText = text;
     return liElement;
+}
+
+function createImageElement(ref) {
+    const imgElement = document.createElement('img');
+    imgElement.src = ref;
+    return imgElement;
 }
 
 function fetchBlobstoreUrl() {
