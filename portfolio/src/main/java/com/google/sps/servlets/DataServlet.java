@@ -61,7 +61,7 @@ public class DataServlet extends HttpServlet {
         String comment = request.getParameter(ServletConstants.COMMENT_TEXT_ID);
         long timestamp = System.currentTimeMillis();
         
-        if(!comment.equals("")){
+        if(!comment.isEmpty()){
             Entity commentEntity = new Entity(ServletConstants.COMMENT_ENTITY_ID);
             commentEntity.setProperty(ServletConstants.COMMENT_TEXT_ID, comment);
             commentEntity.setProperty(ServletConstants.COMMENT_TIMESTAMP_ID, timestamp);
@@ -72,8 +72,7 @@ public class DataServlet extends HttpServlet {
     }
 
     private String convertToJsonUsingGson(ArrayList<String> messages) {
-        Gson gson = new Gson();
-        return gson.toJson(messages);
+        return new Gson().toJson(messages);
     }
 }
 
