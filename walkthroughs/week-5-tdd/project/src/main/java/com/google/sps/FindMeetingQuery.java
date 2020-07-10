@@ -49,7 +49,7 @@ public final class FindMeetingQuery {
             int eventEndTime = event.getWhen().end();
             if(!Collections.disjoint(event.getAttendees(), requestedAttendees)){
                 if(nextAvailiableTime + requestedDuration <= eventStartTime){
-                    qualifyingTimeRanges.add(TimeRange.fromStartEnd(nextAvailiableTime, eventEndTime, false));
+                    qualifyingTimeRanges.add(TimeRange.fromStartEnd(nextAvailiableTime, eventStartTime, false));
                 }
                 nextAvailiableTime = Math.max(eventEndTime, nextAvailiableTime);
             }
