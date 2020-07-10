@@ -14,10 +14,49 @@
 
 package com.google.sps;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
-  }
+    public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        Set<String> requestedAttendees = request.getAttendees();
+        long requestedDuration = request.getDuration();
+        
+        if (requestedDuration > TimeRange.WHOLE_DAY.duration()) {
+            return new ArrayList();
+        }
+        
+        if (events.isEmpty()) {
+            return Arrays.asList(TimeRange.WHOLE_DAY);
+        }
+        
+        Collection<TimeRange> queryResponse = findQualifyingTimeRanges(requestedAttendees, events, requestedDuration);
+        
+        return queryResponse; 
+    }
+
+    private Collection<TimeRange> findQualifyingTimeRanges(Set<String> requestedAttendees, Collection<Event> events, long requestedDuration) {
+        Collection<TimeRange> qualifyingTimeRanges = new ArrayList();
+        List<Event> eventsList = new ArrayList(events);
+        Collections.sort(eventsList, Event.ORDER_BY_START);
+        int nextAvailiableTime = TimeRange.START_OF_DAY;
+        for(Event event : eventsList){
+            int eventStartTime = event.getWhen().start();
+            int eventEndTime = event.getWhen().end();
+            if(!Collections.disjoint(event.getAttendees(), requestedAttendees)){
+                if(nextAvailiableTime + requestedDuration <= eventStartTime){
+                    qualifyingTimeRanges.add(TimeRange.fromStartEnd(nextAvailiableTime, eventStartTime, false));
+                }
+                nextAvailiableTime = Math.max(eventEndTime, nextAvailiableTime);
+            }
+        }
+        if (nextAvailiableTime + requestedDuration <= TimeRange.END_OF_DAY) {
+            qualifyingTimeRanges.add(TimeRange.fromStartEnd(nextAvailiableTime, TimeRange.END_OF_DAY, true));
+        }
+        return qualifyingTimeRanges;
+    }
 }
