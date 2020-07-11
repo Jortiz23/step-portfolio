@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 public final class FindMeetingQuery {
@@ -34,17 +35,16 @@ public final class FindMeetingQuery {
             return Arrays.asList(TimeRange.WHOLE_DAY);
         }
         
-        Collection<TimeRange> queryResponse = findQualifyingTimeRanges(requestedAttendees, events, requestedDuration);
+        return findQualifyingTimeRanges(requestedAttendees, events, requestedDuration);
         
-        return queryResponse; 
+        
     }
 
     private Collection<TimeRange> findQualifyingTimeRanges(Set<String> requestedAttendees, Collection<Event> events, long requestedDuration) {
         Collection<TimeRange> qualifyingTimeRanges = new ArrayList();
-        List<Event> eventsList = new ArrayList(events);
-        Collections.sort(eventsList, Event.ORDER_BY_START);
+        List<Event> eventsList = events.stream().sorted(Event.ORDER_BY_START).collect(Collectors.toList());
         int nextAvailiableTime = TimeRange.START_OF_DAY;
-        for(Event event : eventsList){
+        for(Event event : events){
             int eventStartTime = event.getWhen().start();
             int eventEndTime = event.getWhen().end();
             if(!Collections.disjoint(event.getAttendees(), requestedAttendees)){
