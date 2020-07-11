@@ -19,10 +19,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 public final class MeetingRequest {
   // All the people that should be attending this new meeting. Use a set to avoid duplicates.
-  private final Collection<String> attendees = new HashSet<>();
+  private final Set<String> attendees = new HashSet<>();
 
   // Some optional attendees for this new meeting. Use a set to avoid duplicates.
   private final Collection<String> optional_attendees = new HashSet<>();
@@ -38,8 +39,8 @@ public final class MeetingRequest {
   /**
    * Returns a read-only copy of the people who are required to attend this meeting.
    */
-  public Collection<String> getAttendees() {
-    return Collections.unmodifiableCollection(attendees);
+  public Set<String> getAttendees() {
+    return Collections.unmodifiableSet(attendees);
   }
 
   /**
